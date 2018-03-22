@@ -1,6 +1,7 @@
 import * as React from 'react';
 import './App.css';
 import * as Matter from 'matter-js';
+import MyRenderer from './Renderers/myRenderer';
 
 // interface AppState {
 //     gameCanvas: HTMLCanvasElement | null;
@@ -39,28 +40,28 @@ class App extends React.Component<{}, {}> {
         // create an engine
         var engine = Engine.create();
 
-        // create a renderer
-        var render = Render.create({
+        const r = new MyRenderer({
             canvas: this.gameCanvas,
             engine: engine,
+            intervalMillis: 10,
+            width: 1000,
+            height: 1000
         });
 
-        // render.options.width = Math.min(canvasWidth, canvasHeight);
-        // render.options.height = Math.min(canvasWidth, canvasHeight);
-
         // create two boxes and a ground
-        var boxA = Bodies.rectangle(400, 200, 80, 80);
-        var boxB = Bodies.rectangle(450, 50, 80, 80);
-        var ground = Bodies.rectangle(400, 610, 810, 60, { isStatic: true });
+        var boxA = Bodies.rectangle(300, 10, 20, 20);
+        var boxB = Bodies.rectangle(148, 50, 20, 20);
+        var boxC = Bodies.rectangle(155, 30, 20, 20);
+        var ground = Bodies.rectangle(300, 300, 300, 10, { isStatic: true });
 
         // add all of the bodies to the world
-        World.add(engine.world, [boxA, boxB, ground]);
+        World.add(engine.world, [boxA, boxB, boxC, ground]);
 
         // run the engine
         Engine.run(engine);
 
         // run the renderer
-        Render.run(render);
+        r.run();
     }
 }
 
