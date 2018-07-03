@@ -21,3 +21,7 @@ export const setInitalBodies = () => {
         Bodies.rectangle(300, 300, 300, 10, { isStatic: true })
     ]);
 };
+
+export const addTestBody = () => {
+    addBody(Bodies.rectangle(200, 20, 30, 30));
+};
