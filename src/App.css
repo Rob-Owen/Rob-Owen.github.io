@@ -20,4 +20,12 @@
 .Game-Canvas {
     height: 80%;
     width: 100%;
+    overflow: visible;
+}
+
+.AddButton {
+    z-index: 1;
+    position: absolute;
+    left: 10px;
+    top: 10px;
 }

@@ -22,6 +22,6 @@ export const setInitalBodies = () => {
     ]);
 };
 
-export const addTestBody = () => {
-    addBody(Bodies.rectangle(200, 20, 30, 30));
+export const addTestBody = (x: number, y: number) => {
+    addBody(Bodies.rectangle(x, y, 30, 30));
 };

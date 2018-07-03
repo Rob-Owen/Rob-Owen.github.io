@@ -1,22 +1,22 @@
 import * as React from 'react';
-import * as BodyManager from './Bodies';
 
-export default class AddButton extends React.Component<{}, {}> {
+interface AddButtonProps {
+    clickedCallback: () => void;
+}
 
-    public constructor(props: {}) {
+export default class AddButton extends React.Component<AddButtonProps, {}> {
+    private clickedCallback: () => void;
+
+    public constructor(props: AddButtonProps) {
         super(props);
-        this.buttonClicked = this.buttonClicked.bind(this);
+        this.clickedCallback = props.clickedCallback;
     }
 
     render() {
         return (
-            <button onClick={this.buttonClicked}>
+            <button className="AddButton" onClick={this.clickedCallback}>
                 Add test cube
             </button>
         );
-    }
-
-    buttonClicked(): void {
-        BodyManager.addTestBody();
     }
 }
