@@ -22,18 +22,28 @@ export default class GameCanvas extends React.Component<{}, GameState> {
         );
     }
 
-    public componentDidMount(): void {
+    public componentDidMount() {
         BodyManager.registerCallback(bodies => World.add(this.state.engine.world, bodies));
         BodyManager.setInitalBodies();
         this.runPhysics();
         this.renderPhysics();
+        // this does not render correctly because the renderer wipes it!
+        // moving non-collision objects (e.g. markers) should be part of the physics engine (different collision group)
+        // static decoration of the canvas should be overlaid on it.
+        this.drawOnCanvas(); 
     }
 
-    private runPhysics(): void {
+    private runPhysics() {
         Engine.run(this.state.engine);
     }
 
-    private renderPhysics(): void {
+    private drawOnCanvas() {
+        const ctx = this.gameCanvas.getContext('2d')!;
+        ctx.fillStyle = 'black';
+        ctx.fillRect(30, 20, 50, 50);
+    }
+
+    private renderPhysics() {
         (new MyRenderer({
             canvas: this.gameCanvas,
             engine: this.state.engine,
