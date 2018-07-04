@@ -5,8 +5,12 @@ export default class PointerTracker {
     private scaleFactor: number;
     
     public constructor(width: number, public yPosition: number) {
-        this.scaleFactor = width / 2;
+        this.updateWidth(width);
         this.startTimeStamp = (new Date()).getTime();
+    }
+
+    public updateWidth(newWidth: number) {
+        this.scaleFactor = newWidth / 2;
     }
 
     public get xPosition() {
