@@ -13,7 +13,6 @@ export default class GameCanvas extends React.Component<{}, GameState> {
 
     public constructor(props: {}) {
         super(props);
-        this.runPhysics = this.runPhysics.bind(this);
         this.state = {engine : Engine.create()};
         this.addNewSquare = this.addNewSquare.bind(this);
     }
@@ -30,12 +29,8 @@ export default class GameCanvas extends React.Component<{}, GameState> {
     public componentDidMount() {
         BodyManager.registerCallback(bodies => World.add(this.state.engine.world, bodies));
         BodyManager.setInitalBodies();
-        this.runPhysics();
-        this.renderPhysics();
-    }
-
-    private runPhysics() {
         Engine.run(this.state.engine);
+        this.renderPhysics();
     }
 
     private renderPhysics() {

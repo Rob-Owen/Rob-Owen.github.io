@@ -18,8 +18,7 @@
 }
 
 .Game-Canvas {
-    height: 80%;
-    width: 100%;
+    background-color: red;
     overflow: visible;
 }
 
