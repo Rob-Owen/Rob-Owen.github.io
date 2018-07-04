@@ -1,4 +1,4 @@
-import { Bodies } from 'matter-js';
+import { Bodies, Vector } from 'matter-js';
 
 type bodyCallback = (bodies: Matter.Body[]) => void;
 const bodiesAddedCallbacks: bodyCallback[] = [];
@@ -18,10 +18,10 @@ export const setInitalBodies = () => {
         Bodies.rectangle(300, 10, 20, 20),
         Bodies.rectangle(148, 50, 20, 20),
         Bodies.rectangle(155, 30, 20, 20),
-        Bodies.rectangle(300, 300, 300, 10, { isStatic: true })
+        Bodies.rectangle(500, 300, 500, 10, { isStatic: true })
     ]);
 };
 
-export const addTestBody = (x: number, y: number) => {
-    addBody(Bodies.rectangle(x, y, 30, 30));
+export const addTestBody = (v: Vector) => {
+    addBody(Bodies.rectangle(v.x, v.y, 30, 30));
 };

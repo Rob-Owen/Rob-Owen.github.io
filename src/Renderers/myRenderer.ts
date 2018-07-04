@@ -1,5 +1,6 @@
 import * as Matter from 'matter-js';
 import PointerTracker from '../PointTracker';
+import { getDisplayCoords, DisplayVector } from './coordinates';
 
 interface RendererOptions {
     canvas: HTMLCanvasElement;
@@ -33,8 +34,11 @@ export default class Renderer {
         this.running = false;
     }
 
-    public getPointerPosition(): [number, number] {
-        return [this.trackers[0].xPosition, this.trackers[0].yPosition];
+    public getPointerPosition(): DisplayVector {
+        return {
+            x: this.trackers[0].xPosition,
+            y: this.trackers[0].yPosition
+        };
     }
 
     public addTracker(pointer: PointerTracker) {
@@ -61,7 +65,7 @@ export default class Renderer {
             this.resetCanvas();
             this.renderBodies(Matter.Composite.allBodies(this.config.engine.world), this.context);
             
-            // position pointer - note this is not registered with the engine so doesn't interact
+            // position pointer(s) - note this is not registered with the engine so doesn't interact with anything
             this.renderBodies(this.trackers.map(tr => tr.body), this.context);
         }
     }
@@ -81,13 +85,23 @@ export default class Renderer {
             if (!body.render.visible) {
                 continue;
             }
-            this.context.moveTo(body.vertices[0].x, body.vertices[0].y);
+            
+            this.moveTo(getDisplayCoords(body.vertices[0], this.config.width));
             body.parts.forEach(part => {
-                part.vertices.forEach(v => this.context.lineTo(v.x, v.y));
+                part.vertices.forEach(v => this.lineTo(getDisplayCoords(v, this.config.width)));
             });
-            this.context.lineTo(body.vertices[0].x, body.vertices[0].y);
+            
+            this.lineTo(getDisplayCoords(body.vertices[0], this.config.width));
         }
         this.context.lineWidth = 1;
         this.context.stroke();
+    }
+
+    private moveTo(point: DisplayVector) {
+        this.context.moveTo(point.x, point.y);
+    }
+
+    private lineTo(point: DisplayVector) {
+        this.context.lineTo(point.x, point.y);
     }
 }

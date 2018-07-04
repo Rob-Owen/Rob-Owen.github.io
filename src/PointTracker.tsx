@@ -1,20 +1,15 @@
 import { Bodies } from 'matter-js';
+import { RENDER_WIDTH } from './Renderers/coordinates';
 
 export default class PointerTracker {
     private startTimeStamp: number;
-    private scaleFactor: number;
     
-    public constructor(width: number, public yPosition: number) {
-        this.updateWidth(width);
+    public constructor(public yPosition: number) {
         this.startTimeStamp = (new Date()).getTime();
     }
 
-    public updateWidth(newWidth: number) {
-        this.scaleFactor = newWidth / 2;
-    }
-
     public get xPosition() {
-        return (Math.cos(this.time() / 2000) + 1) * this.scaleFactor;
+        return (Math.cos(this.time() / 2000) + 1) * 0.5 * RENDER_WIDTH;
     }
 
     private time() {

@@ -23,7 +23,7 @@ export default class GameCanvas extends React.Component<{}, CanvasState> {
             width : 0,
             height: 0
         };
-        this.pointer = new PointerTracker(this.state.width, 10);
+        this.pointer = new PointerTracker(10);
         this.addNewSquare = this.addNewSquare.bind(this);
         this.updateDimensions = this.updateDimensions.bind(this);
     }
@@ -72,14 +72,12 @@ export default class GameCanvas extends React.Component<{}, CanvasState> {
     }
 
     private addNewSquare() {
-        const [x, y] = this.renderer.getPointerPosition();
-        BodyManager.addTestBody(x, y);
+        BodyManager.addTestBody(this.renderer.getPointerPosition());
     }
 
     private updateDimensions() {
         const width = window.innerWidth * 0.8;
         const height = window.innerHeight * 0.8;
-        this.pointer.updateWidth(width);
         this.setState({width, height});
     }
 }
