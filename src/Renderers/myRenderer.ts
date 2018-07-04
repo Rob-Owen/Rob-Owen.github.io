@@ -1,4 +1,5 @@
 import * as Matter from 'matter-js';
+import PointerTracker from '../PointTracker';
 
 interface RendererOptions {
     canvas: HTMLCanvasElement;
@@ -8,39 +9,16 @@ interface RendererOptions {
     height: number;
 }
 
-class PointerTracker {
-    private startTimeStamp: number;
-    private scaleFactor: number;
-    
-    public constructor(width: number, public yPosition: number) {
-        this.scaleFactor = width / 2;
-        this.startTimeStamp = (new Date()).getTime();
-    }
-
-    public get xPosition() {
-        return (Math.cos(this.time() / 2000) + 1) * this.scaleFactor;
-    }
-
-    private time() {
-        return (new Date()).getTime() - this.startTimeStamp;
-    }
-
-    public get body() {
-        return Matter.Bodies.circle(this.xPosition, this.yPosition, 5);
-    }
-}
-
 export default class Renderer {
     private config: RendererOptions;
     private running: boolean;
     private startTime: number;
     private context: CanvasRenderingContext2D;
-    private pointerTracker: PointerTracker;
+    private trackers: PointerTracker[] = [];
 
     public constructor(options: RendererOptions) {
         this.config = options;
         this.running = false;
-        this.pointerTracker = new PointerTracker(options.width, 10);
         this.configureCanvas(options.canvas, options.width, options.height);
         this.getPointerPosition = this.getPointerPosition.bind(this);
     }
@@ -51,8 +29,16 @@ export default class Renderer {
         window.requestAnimationFrame(this.runStep.bind(this));
     }
 
+    public stop() {
+        this.running = false;
+    }
+
     public getPointerPosition(): [number, number] {
-        return [this.pointerTracker.xPosition, this.pointerTracker.yPosition];
+        return [this.trackers[0].xPosition, this.trackers[0].yPosition];
+    }
+
+    public addTracker(pointer: PointerTracker) {
+        this.trackers.push(pointer);
     }
 
     private configureCanvas(canvas: HTMLCanvasElement, w: number, h: number) {
@@ -72,12 +58,12 @@ export default class Renderer {
                     window.requestAnimationFrame(this.runStep.bind(this));
                 },
                 this.config.intervalMillis);
+            this.resetCanvas();
+            this.renderBodies(Matter.Composite.allBodies(this.config.engine.world), this.context);
+            
+            // position pointer - note this is not registered with the engine so doesn't interact
+            this.renderBodies(this.trackers.map(tr => tr.body), this.context);
         }
-        this.resetCanvas();
-        this.renderBodies(Matter.Composite.allBodies(this.config.engine.world), this.context);
-        
-        // position pointer - note this is not registered with the engine so doesn't interact
-        this.renderBodies([this.pointerTracker.body], this.context);
     }
 
     private resetCanvas() {
