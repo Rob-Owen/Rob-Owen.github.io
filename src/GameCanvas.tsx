@@ -76,8 +76,8 @@ export default class GameCanvas extends React.Component<{}, CanvasState> {
     }
 
     private updateDimensions() {
-        const width = window.innerWidth * 0.8;
-        const height = window.innerHeight * 0.8;
+        const width = window.innerWidth;
+        const height = window.innerHeight;
         this.setState({width, height});
     }
 }
