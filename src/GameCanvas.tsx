@@ -2,7 +2,6 @@ import * as React from 'react';
 import { Engine, World } from 'matter-js';
 import * as BodyManager from './Bodies';
 import MyRenderer from './Renderers/myRenderer';
-import AddButton from './AddButton';
 import PointerTracker from './PointTracker';
 
 interface CanvasState {
@@ -31,8 +30,11 @@ export default class GameCanvas extends React.Component<{}, CanvasState> {
     public render() {
         return (
             <div> 
-                <canvas className="Game-Canvas" ref={canvas => { this.gameCanvas = canvas!; }}/>
-                <AddButton clickedCallback={this.addNewSquare}/>
+                <canvas 
+                    onClick={this.addNewSquare} 
+                    className="Game-Canvas" 
+                    ref={canvas => { this.gameCanvas = canvas!; }}
+                />
             </div>
         );
     }

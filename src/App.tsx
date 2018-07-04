@@ -1,7 +1,6 @@
 import * as React from 'react';
 import './App.css';
 import GameCanvas from './GameCanvas';
-import AddButton from './AddButton';
 
 class App extends React.Component<{}, {}> {
     render() {
